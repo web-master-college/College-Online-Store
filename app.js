@@ -1,1 +1,1 @@
-alert("Welcome to Ivory Store.");
+alert("Welcome to College Store.");
