@@ -3,19 +3,22 @@ const chalk = require('chalk');
 const app = express();
 const PORT = 3000;
 const path = require('path');
-const HomeController = require('./controllers/Home')
-const ProductConroller = require('./controllers/Product');
+const HomePageRoutes = require('./routes/Home');
+// const ProductConroller = require('./controllers/Product');
 
 // HTTP -> GET, POST, DELETE , PUT
 
 app.set('view engine', 'ejs');
 
+
 app.use(express.static(path.join(__dirname,'public')));
+app.use(HomePageRoutes);
+
 
 // Homepage
-app.get('/', HomeController.mainPage);
+// app.get('/', HomeController.homePage);
 
-app.get('/products', ProductConroller.showProducts);
+// app.get('/products', ProductConroller.showProducts);
 
 
 

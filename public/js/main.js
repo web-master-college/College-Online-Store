@@ -1,3 +1,31 @@
+const fullName = document.querySelector('#fullName');
+const message = document.querySelector('#message');
+const phone = document.querySelector('#phone');
+const email = document.querySelector('#email');
+const contactUsForm = document.querySelector('#contact-us-form');
+
+function onSubmitContactUsForm(event){
+	event.preventDefault();
+
+	const isValidSent = fullName.value &&
+	message.value && phone.value && email.value;
+	const query = `fullName=${fullName.value}&message=${message.value}&phone=${phone.value}&email=${email.value}`;
+	fetch(`api/contact-us?${query}`)
+	.then(res => res.json())
+	.then(result =>{
+		console.log('result returned from server', result);
+	});
+
+}
+
+
+if(contactUsForm){
+	contactUsForm.addEventListener('submit', onSubmitContactUsForm);
+}
+
+
+
+
 (function($) {
 	"use strict"
 
@@ -127,14 +155,17 @@
 
 	var priceInputMax = document.getElementById('price-max'),
 			priceInputMin = document.getElementById('price-min');
+	if(priceInputMax){
+		priceInputMax.addEventListener('change', function(){
+			updatePriceSlider($(this).parent() , this.value)
+		});
+	}
 
-	priceInputMax.addEventListener('change', function(){
-		updatePriceSlider($(this).parent() , this.value)
-	});
-
-	priceInputMin.addEventListener('change', function(){
-		updatePriceSlider($(this).parent() , this.value)
-	});
+	if(priceInputMin){
+		priceInputMin.addEventListener('change', function(){
+			updatePriceSlider($(this).parent() , this.value)
+		});
+	}
 
 	function updatePriceSlider(elem , value) {
 		if ( elem.hasClass('price-min') ) {
