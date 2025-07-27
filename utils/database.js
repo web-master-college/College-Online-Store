@@ -17,6 +17,14 @@ function getModelInfo(Model) {
   };
 }
 
+const getModelAttributes = (ModelInstance, Sequelize, DataTypes) => {
+ const model = ModelInstance(Sequelize, DataTypes);
+  return {
+    tableName: model.getTableName(),
+    attributes: model.getAttributes()
+  }   
+}
+
 
 module.exports = {
     sequelize,
