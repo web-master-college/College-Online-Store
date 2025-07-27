@@ -1,7 +1,6 @@
-const {sequelize} = require('../utils/database');
 
 
-module.exports = (sequelizev, DataTypes) => {
+module.exports = (sequelize, DataTypes) => {
     const Product = sequelize.define('Product', {
         id: {
             autoIncrement: true,
@@ -16,8 +15,22 @@ module.exports = (sequelizev, DataTypes) => {
             type: DataTypes.TEXT
         },
         price: {
-            allowNull: null,
+            allowNull: false,
             type: DataTypes.INTEGER
+        },
+        discount: {
+            allowNull: false,
+            type: DataTypes.INTEGER,
+            defaultValue: 0
+        },
+        sku:{
+            allowNull: false,
+            type: DataTypes.INTEGER
+        },
+        stock:{
+            allowNull: false,
+            type: DataTypes.INTEGER,
+            defaultValue: 0
         }
 
     })
