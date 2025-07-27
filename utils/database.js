@@ -28,5 +28,6 @@ const getModelAttributes = (ModelInstance, Sequelize, DataTypes) => {
 
 module.exports = {
     sequelize,
-    getModelInfo  
+    getModelInfo,
+    getModelAttributes
 }
