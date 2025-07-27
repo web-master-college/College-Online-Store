@@ -1,5 +1,30 @@
 "use strict";
 
+const contactFormMain = document.querySelector('#contact-form');
+function onSubmitForm(event) {
+  event.preventDefault();
+
+  const formData = new FormData(event.target);
+  const data = Object.fromEntries(formData.entries());
+  const query = new URLSearchParams(data).toString();
+
+  fetch('/api/contact?' + query)
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      notifyMessage('Form submitted successfully!');
+      event.target.reset();
+    }else{
+      notifyMessage('Error submitting form...'); 
+    }
+  });
+
+}
+if(contactFormMain) {
+  contactFormMain.addEventListener('submit', onSubmitForm);
+
+}
+
 // Load event to execute code after the page has fully loaded
 window.addEventListener("load", () => {
   loadInitialSetup(); // Load initial setup
@@ -153,7 +178,7 @@ const resizeModal = (target) => {
 const loader = () => {
   setTimeout(() => {
     const loader_content = document.querySelector(".loader-content");
-    loader_content.classList.add(
+    loader_content && loader_content.classList.add(
       "transition-all",
       "duration-500",
       "opacity-0",
@@ -164,7 +189,7 @@ const loader = () => {
   setTimeout(() => {
     const loader = document.querySelector(".loader");
     const body = document.querySelector("body");
-    loader.classList.add(
+    loader && loader.classList.add(
       "transition-all",
       "duration-1000",
       "opacity-0",
@@ -344,10 +369,10 @@ const toggleCheck = (target) => {
 // Make "Go top" button appear/disappear when scrolling down
 const scrollUpButton = () => {
   const button = document.querySelector(".scroll-up");
-  if (document.documentElement.scrollTop > 500) {
+  if (document.documentElement.scrollTop > 500 && button) {
     button.classList.remove("-bottom-16");
     button.classList.add("z-40", "bottom-8");
-  } else {
+  } else if(button){
     button.classList.remove("z-40", "bottom-8");
     button.classList.add("-bottom-16");
   }
@@ -790,10 +815,10 @@ const select = () => {
 };
 
 // Izi Toast
-const notifyMessage = () => {
+const notifyMessage = (message) => {
   iziToast.show({
-    message: "Message sent successfully!",
-    position: "topRight",
+    message,
+    position: "bottomRight",
     color: "rgb(34 197 94 / 70%",
     icon: "bi-check-circle-fill",
     iconColor: "#fff",

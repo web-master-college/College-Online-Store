@@ -1,7 +1,6 @@
 
-
 module.exports = (sequelize, DataTypes) => {
-    const Product = sequelize.define('Product', {
+    const Form = sequelize.define('Form', {
         id: {
             autoIncrement: true,
             primaryKey: true,
@@ -11,26 +10,17 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             type: DataTypes.STRING
         },
-        description: {
+        email: {
+            type: DataTypes.STRING
+        },
+        message: {
+            allowNull: false,
             type: DataTypes.TEXT
         },
-        price: {
-            allowNull: false,
-            type: DataTypes.INTEGER
-        },
-        discount: {
-            allowNull: false,
-            type: DataTypes.INTEGER,
-            defaultValue: 0
-        },
-        sku:{
-            allowNull: false,
-            type: DataTypes.INTEGER
-        },
-        stock:{
-            allowNull: false,
-            type: DataTypes.INTEGER,
-            defaultValue: 0
+        isCallBack:{
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+            field: 'is_call_back'
         },
         createdAt: {
             allowNull: false,
@@ -42,8 +32,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DATE,
             field: 'updated_at'
         }
-
     })
 
-    return Product;
+    return Form;
 }

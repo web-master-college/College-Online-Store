@@ -1,14 +1,24 @@
-const {Sequelize} = require('sequelize');
-const config = require('../config/config.json');
-const env = process.env.NODE_ENV || "development"; // "development" , "test", "production"
+const {DataTypes} = require('sequelize');
 
 
-const {password, username, database} = config[env];
+function getModelInfo(Model) {
+ 
+  const sequelizeMock = { define: (name, attributes, options) => ({ name, attributes, options }) };
+  const tempMpdel = Model(sequelizeMock, DataTypes);
 
-const sequelize = new Sequelize(database, username, password, config[env]);
 
+  const tableName = tempMpdel.options && tempMpdel.options.tableName
+    ? tempMpdel.options.tableName
+    : tempMpdel.name + 's';
+
+  return {
+    tableName,
+    attributes: tempMpdel.attributes
+  };
+}
 
 
 module.exports = {
-    sequelize
+    sequelize,
+    getModelInfo  
 }

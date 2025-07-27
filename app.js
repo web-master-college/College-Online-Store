@@ -4,8 +4,8 @@ const app = express();
 const PORT = 3000;
 const path = require('path');
 const HomePageRoutes = require('./routes/Home');
-const {sequelize} = require('./utils/database');
-
+const ApiRoutes = require('./routes/Api');
+const {sequelize} = require('./models');
 // products
 
 
@@ -18,7 +18,7 @@ app.set('view engine', 'ejs');
 
 app.use(express.static(path.join(__dirname,'public')));
 app.use(HomePageRoutes);
-
+app.use('/api', ApiRoutes);
 
 // Homepage
 // app.get('/', HomeController.homePage);

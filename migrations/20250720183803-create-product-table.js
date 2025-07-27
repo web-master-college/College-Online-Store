@@ -1,15 +1,16 @@
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
-const ModelInstance = require('../models/Product');
-const {DataTypes, Sequelize} = require('sequelize');
+const {getModelInfo} = require('../utils/database');
+const Product = require('../models/Product');
+
 
 module.exports = {
   async up(queryInterface) {
-      const Product = ModelInstance(Sequelize, DataTypes)
-      await queryInterface.createTable(Product.getTableName(), Product.getAttributes());
+    const { tableName, attributes } = getModelInfo(Product);
+    await queryInterface.createTable(tableName, attributes);
   },
-  async down(queryInterface, Sequelize) {
-    const Product = ModelInstance(Sequelize, DataTypes);
-    await queryInterface.dropTable(Product.getTableName());
+  async down(queryInterface) {
+    const { tableName } = getModelInfo(Product);
+    await queryInterface.dropTable(tableName);
   }
 };
