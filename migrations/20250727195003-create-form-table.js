@@ -1,16 +1,41 @@
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
-const Form = require('../models/Form');
-const {getModelInfo} = require('../utils/database');
 
 module.exports = {
-  async up(queryInterface) {
-      const {tableName, attributes} = getModelInfo(Form)
-      await queryInterface.createTable(tableName, attributes);
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('Forms', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER
+      },
+      name: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      email: {
+        type: Sequelize.STRING
+      },
+      message: {
+        allowNull: false,
+        type: Sequelize.TEXT
+      },
+      is_call_back: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+      },
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE
+      }
+    });
   },
   async down(queryInterface, Sequelize) {
-
-    const {tableName} = getModelInfo(Form);
-    await queryInterface.dropTable(tableName);
+    await queryInterface.dropTable('Forms');
   }
 };

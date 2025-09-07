@@ -3,7 +3,6 @@
 const contactFormMain = document.querySelector('#contact-form');
 function onSubmitForm(event) {
   event.preventDefault();
-
   const formData = new FormData(event.target);
   const data = Object.fromEntries(formData.entries());
   const query = new URLSearchParams(data).toString();
@@ -22,7 +21,6 @@ function onSubmitForm(event) {
 }
 if(contactFormMain) {
   contactFormMain.addEventListener('submit', onSubmitForm);
-
 }
 
 // Load event to execute code after the page has fully loaded

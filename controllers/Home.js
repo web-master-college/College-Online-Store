@@ -5,29 +5,28 @@ const homePage = (request, response) =>{
 }
 
 const contactUsPage = (request, response) =>{
-    const {fullName, phone, email, message} = request.query;
-    
+      response.render('contact-us');
     // const fullName = request.query.fullName;
     // const phone = request.query.phone;
     // const email = request.query.email;
     // const message = request.query.message;
-    if(fullName){
-        response.render('Thank-you-page',{
-            title: 'We got your message',
-            fullName,
-            phone,
-            email,
-            message
-        })
-    }else{
-        response.render('contact-us');
-    }
+    // if(fullName){
+    //     response.render('Thank-you-page',{
+    //         title: 'We got your message',
+    //         fullName,
+    //         phone,
+    //         email,
+    //         message
+    //     })
+    // }else{
+      
+    // }
 }
 
 const contactUsPageAPI = (request, response) =>{
     const {fullName, phone, email, message} = request.query;
 
-    response.json({fullName, phone, email, message});
+    response.json({fullName, phone, email, message, success: true});
 }
 
 

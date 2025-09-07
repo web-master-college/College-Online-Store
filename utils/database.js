@@ -1,19 +1,32 @@
-const {DataTypes} = require('sequelize');
 
+const { DataTypes } = require('sequelize');
 
 function getModelInfo(Model) {
- 
-  const sequelizeMock = { define: (name, attributes, options) => ({ name, attributes, options }) };
-  const tempMpdel = Model(sequelizeMock, DataTypes);
+  // Create a mock sequelize object to get the model definition
+  const sequelizeMock = {
+    define: (name, attributes, options) => {
+      return { name, rawAttributes: attributes, options };
+    }
+  };
+  const tempModel = Model(sequelizeMock, DataTypes);
 
+  const tableName = tempModel.options && tempModel.options.tableName
+    ? tempModel.options.tableName
+    : tempModel.name + 's';
 
-  const tableName = tempMpdel.options && tempMpdel.options.tableName
-    ? tempMpdel.options.tableName
-    : tempMpdel.name + 's';
+  // Convert model attributes to migration-compatible attributes
+  const attributes = {};
+  for (const [key, value] of Object.entries(tempModel.rawAttributes)) {
+    // Map 'field' to key if present
+    const columnName = value.field || key;
+    attributes[columnName] = { ...value };
+    // Remove 'field' property for migration
+    delete attributes[columnName].field;
+  }
 
   return {
     tableName,
-    attributes: tempMpdel.attributes
+    attributes
   };
 }
 
