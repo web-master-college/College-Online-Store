@@ -5,7 +5,7 @@ const homePage = (request, response) =>{
 }
 
 const contactUsPage = (request, response) =>{
-    const {fullName, phone, email, message} = request.query;
+    const {fullName, phone, email, message, address} = request.query;
     
     // const fullName = request.query.fullName;
     // const phone = request.query.phone;
@@ -14,6 +14,7 @@ const contactUsPage = (request, response) =>{
     if(fullName){
         response.render('Thank-you-page',{
             title: 'We got your message',
+            address,
             fullName,
             phone,
             email,
