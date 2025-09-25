@@ -19,7 +19,12 @@ const sendContactForm = async (req, res) => {
 
 }
 
+const createContactPage = (req, res) => {
+    res.render('Home');
+}
+
 
 module.exports = {
+    createContactPage,
     sendContactForm
 };
