@@ -1,3 +1,11 @@
+
+
+const ProductPage = async (request, response) =>{
+    
+        response.render('product-details');
+}
+
+
 const showProducts = (request, response) =>{
     response.write('This is products page!');
     response.end();
@@ -6,5 +14,6 @@ const showProducts = (request, response) =>{
 
 
 module.exports = {
+    ProductPage,
     showProducts
 }
