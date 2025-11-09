@@ -1,5 +1,21 @@
 "use strict";
 
+function getCookie(name) {
+  const nameEQ = name + "=";
+  const ca = document.cookie.split(';');
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) === ' ') { // Remove leading spaces
+      c = c.substring(1, c.length);
+    }
+    if (c.indexOf(nameEQ) === 0) { // Check if this cookie starts with the desired name
+      return c.substring(nameEQ.length, c.length); // Return the cookie's value
+    }
+  }
+  return null; // Return null if the cookie is not found
+}
+
+
 const contactFormMain = document.querySelector('#contact-form');
 function onSubmitForm(event) {
   event.preventDefault();
@@ -868,3 +884,53 @@ const sendEmail = () => {
       );
     });
 };
+
+const signUpForm = document.getElementById('sign-up-form');
+
+function onSubmitSignUpForm(event){
+        event.preventDefault();
+        const name = signUpForm.querySelector('input[name=name]');
+        const email = signUpForm.querySelector('input[name=email]');
+        const password = signUpForm.querySelector('input[name=password]');
+        const confirmPassword = signUpForm.querySelector('input[name=confirmPassword]');
+        let isError = false;
+       
+        if(name && name.value.trim() === ''){
+          notifyMessage('name can not be empty')
+          isError = true;
+        }
+
+        if(email && email.value.trim() === ''){
+          notifyMessage('Email can not be empty')
+          isError = true;
+
+        }
+        if(password && password.value.trim() === ''){
+          notifyMessage('password can not be empty')
+          isError = true;
+
+        }
+
+        if(confirmPassword && confirmPassword.value.trim() === ''){
+          notifyMessage('confirm password can not be empty')
+          isError = true;
+
+        }
+
+
+        if(confirmPassword.value !== password.value){
+          notifyMessage('passwords do not match');
+          isError = true;
+
+        }
+
+        if(isError){
+          return false;
+        }
+
+        this.submit();
+}
+
+if(signUpForm){
+  signUpForm.addEventListener('submit', onSubmitSignUpForm);
+}

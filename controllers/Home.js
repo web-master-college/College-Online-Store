@@ -1,11 +1,10 @@
-const {Product, ProductImages} = require('../models');
+    const {Product, ProductImages} = require('../models');
 
 
 
 const homePage = async (request, response) =>{
     try{
-
-    
+        
     const productsData = await Product.findAll({
         raw: true,
         include: [{model: ProductImages, required: false, attributes: ['url'], as: 'images'}]
@@ -15,11 +14,9 @@ const homePage = async (request, response) =>{
         url: p['images.url']
     }))
 
-    console.log('products', products);
-
     response.render('Home', {
         title: 'Ivory Store Homepage',
-        products
+        products,
     });
 
 }catch(err){

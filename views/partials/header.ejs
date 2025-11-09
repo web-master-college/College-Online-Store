@@ -127,6 +127,7 @@
                 class="invisible absolute top-full z-30 w-[120%] pt-[10px] opacity-0 transition-all duration-300 group-hover:visible group-hover:opacity-100">
                 <ul
                   class="relative rounded-md bg-white p-[6px] shadow-[0_2px_10px_rgba(131,125,125,0.50)] after:absolute after:bottom-full after:left-[10px] after:h-0 after:w-0 after:border-b-[13px] after:border-l-[13px] after:border-r-[13px] after:border-b-white after:border-l-transparent after:border-r-transparent after:content-['']">
+                 <!-- start: USER is signed out -->
                   <li class="hover:font-semibold">
                     <a href="#" data-tab="0" data-target=".modal-entry">
                       <div
@@ -147,6 +148,7 @@
                       </div>
                     </a>
                   </li>
+                  <!-- end: USER is signed out -->
                 </ul>
               </div>
             </div>
@@ -155,3 +157,4 @@
       </div>
 <%- include('navigation') -%>
     </header>
+<%- include('user-registration') -%>
