@@ -1,5 +1,12 @@
 "use strict";
 
+function setCookie(cname, cvalue, exdays) {
+  const d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  let expires = "expires="+ d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
 function getCookie(name) {
   const nameEQ = name + "=";
   const ca = document.cookie.split(';');
@@ -934,3 +941,20 @@ function onSubmitSignUpForm(event){
 if(signUpForm){
   signUpForm.addEventListener('submit', onSubmitSignUpForm);
 }
+
+
+function onLoadPage(){
+    const signup = getCookie('signup');
+    if(signup){
+
+      const decodedCookieSignUp = decodeURIComponent(signup);
+      const signupObject = JSON.parse(decodedCookieSignUp);
+      // {status: true, message: '', action: 'signup'}
+
+      if(signupObject && signupObject.status && signupObject.action === 'signup'){
+        notifyMessage(signupObject.message);
+      }
+      setCookie('signup', null , 0);
+    }
+}
+document.addEventListener('DOMContentLoaded', onLoadPage)

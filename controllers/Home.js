@@ -14,9 +14,11 @@ const homePage = async (request, response) =>{
         url: p['images.url']
     }))
 
+
+
     response.render('Home', {
         title: 'Ivory Store Homepage',
-        products,
+        products
     });
 
 }catch(err){
@@ -26,21 +28,6 @@ const homePage = async (request, response) =>{
 
 const contactUsPage = (request, response) =>{
       response.render('contact-us');
-    // const fullName = request.query.fullName;
-    // const phone = request.query.phone;
-    // const email = request.query.email;
-    // const message = request.query.message;
-    // if(fullName){
-    //     response.render('Thank-you-page',{
-    //         title: 'We got your message',
-    //         fullName,
-    //         phone,
-    //         email,
-    //         message
-    //     })
-    // }else{
-      
-    // }
 }
 
 const contactUsPageAPI = (request, response) =>{
