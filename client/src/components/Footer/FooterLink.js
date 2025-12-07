@@ -9,7 +9,7 @@ export default function FooterLink(props) {
     <i
       className="bi bi-circle-fill invisible absolute -left-4 flex text-[6px] text-primary-500 group-hover:visible"></i>
     <Link
-      to={props.to || '#'}
+      to={props.to || '/'}
       className="transition-all duration-300 group-hover:text-white">
       {props.title}
     </Link>

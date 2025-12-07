@@ -30,6 +30,20 @@ app.use(session({
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded());
+app.use(express.json());
+
+// Enable CORS for React app
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+  } else {
+    next();
+  }
+});
+
 // const ProductConroller = require('./controllers/Product');
 
 app.use((req, res, next) => {
@@ -40,7 +54,6 @@ app.use((req, res, next) => {
 // HTTP -> GET, POST, DELETE , PUT
 
 app.set('view engine', 'ejs');
-// app.use(express.json())
 
 
 

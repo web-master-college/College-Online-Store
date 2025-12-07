@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from 'react-router-dom';
 
 export default function Navigation() {
   return (
@@ -496,14 +497,13 @@ export default function Navigation() {
 			</li>
 			<li
 				className="relative cursor-pointer after:absolute after:-bottom-[5px] after:left-0 after:right-0 after:h-1 after:w-full after:origin-center after:scale-x-0 after:rounded-lg after:bg-primary-500 after:transition-transform after:duration-200 after:content-[''] hover:after:scale-x-100">
-				<a href="/">Home</a>
+				<Link to="/">Home</Link>
 			</li>
 			<li
 				className="group relative cursor-pointer after:absolute after:-bottom-[5px] after:left-0 after:right-0 after:h-1 after:w-full after:origin-center after:scale-x-0 after:rounded-lg after:bg-primary-500 after:transition-transform after:duration-200 after:content-[''] hover:after:scale-x-100">
 				<a href="#" className="flex items-center gap-1">
 					<span>Pages</span>
-					<i
-						className="bi bi-caret-down-fill flex rotate-0 text-xs text-primary-500 transition-all duration-300 group-hover:rotate-180"></i>
+					<i className="bi bi-caret-down-fill flex rotate-0 text-xs text-primary-500 transition-all duration-300 group-hover:rotate-180"></i>
 				</a>
 				<div
 					className="invisible absolute left-0 pt-[10px] opacity-0 transition-all duration-300 group-hover:visible group-hover:opacity-100">
@@ -727,7 +727,7 @@ export default function Navigation() {
 			</li>
 			<li
 				className="relative cursor-pointer after:absolute after:-bottom-[5px] after:left-0 after:right-0 after:h-1 after:w-full after:origin-center after:scale-x-0 after:rounded-lg after:bg-primary-500 after:transition-transform after:duration-200 after:content-[''] hover:after:scale-x-100">
-				<a href="/contact-us">Contact Us</a>
+				<Link to="/contact-us">Contact Us</Link>
 			</li>
 		</ul>
 	</nav>

@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="grid grid-cols-12 gap-2">
           <div className="col-span-12 sm:col-span-6 lg:col-span-4">
             <div className="pb-6">
-              <img src="img/logo.png" className="h-[40px]" alt="logo" />
+              <img src="/img/logo.png" className="h-[40px]" alt="logo" />
             </div>
             <div>
               <div className="flex items-center gap-[10px] py-2">

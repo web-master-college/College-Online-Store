@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import Navigation from '../Navigation/Navigation'
 import UserRegistration from '../UserRegistration/UserRegistration';
 
@@ -55,9 +56,9 @@ export default function Header() {
       <div
         className="container mx-auto grid h-full grid-cols-4 gap-1 px-2 py-5 sm:px-8 lg:grid-cols-12 lg:gap-0">
         <div className="order-1 col-span-2 self-center lg:order-1 lg:col-span-3">
-          <a href="/">
-            <img className="inline" src="img/logo.png" alt="logo" />
-          </a>
+          <Link to="/">
+            <img className="inline" src="/img/logo.png" alt="logo" />
+          </Link>
         </div>
         <div
           className="header-search order-3 col-span-4 mt-[10px] hidden self-center transition-all duration-300 lg:order-2 lg:col-span-6 lg:mt-0 lg:block">
