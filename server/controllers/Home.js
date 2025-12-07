@@ -1,4 +1,5 @@
 const {Product, ProductImages} = require('../models');
+const {Op} = require('sequelize');
 
 const homePage = async (request, response) =>{
     try{
@@ -31,16 +32,27 @@ const contactUsPageAPI = (request, response) =>{
 
 // API endpoint to get all products
 const getProducts = async (request, response) => {
-    try{
-        const productsData = await Product.findAll({
-            raw: true,
-            include: [{model: ProductImages, required: false, attributes: ['url'], as: 'images'}]
-        });
-        const products = productsData.map(p => ({
-            ...p,
-            url: p['images.url']
-        }))
 
+    const query = request.query.q;
+
+    try{
+        let productsData = [];
+        if(query){
+            productsData = await Product.findAll({
+                where: {
+                    name: {
+                        [Op.like]: `%${query}%`
+                    }
+                },
+                include: [{model: ProductImages, required: false, attributes: ['url'], as: 'images'}]
+            });
+        }else{
+            productsData = await Product.findAll({
+                include: [{model: ProductImages, required: false, attributes: ['url'], as: 'images'}]
+            });
+
+        }
+        const products = productsData;
         response.json({success: true, products});
     }catch(err){
         console.log(err.message);

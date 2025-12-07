@@ -16,9 +16,10 @@ export const notifyMessage = (message) => {
   };
 
 // API Functions
-export const fetchProducts = async () => {
+export const fetchProducts = async (query, isSearch = false) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/products`);
+    const url = `${API_BASE_URL}/api/products${isSearch ? `?q=${query}`: ''}`;
+    const response = await fetch(url);
     if (!response.ok) throw new Error('Failed to fetch products');
     const data = await response.json();
     return data.products || [];

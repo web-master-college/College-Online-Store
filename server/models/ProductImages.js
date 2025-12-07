@@ -3,11 +3,13 @@ module.exports = (sequelize, DataTypes) => {
         productId: {
             allowNull: false,
             type: DataTypes.INTEGER,
-            field: 'product_id'
+            field: 'product_id',
+            primaryKey: true
         },
         url: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            primaryKey: true
         }
     },{
         tableName: 'productimages',

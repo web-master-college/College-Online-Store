@@ -1,12 +1,25 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { fetchProducts } from '../../utils';
 import Navigation from '../Navigation/Navigation'
 import UserRegistration from '../UserRegistration/UserRegistration';
 
 export default function Header() {
   const [user, setUser] = useState(false);
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState('');
 
-
+  const onSearchChange = event => setSearchTerm(event.target.value);
+  const onSubmitSearch = event =>{
+    event.preventDefault();
+      if(searchTerm){
+            fetchProducts(searchTerm, true)
+            .then(products =>{
+              navigate('/search');
+              console.log('Searched products results: ', products);
+            })
+      }
+  }
 
   return (
     <React.Fragment>
@@ -62,13 +75,15 @@ export default function Header() {
         </div>
         <div
           className="header-search order-3 col-span-4 mt-[10px] hidden self-center transition-all duration-300 lg:order-2 lg:col-span-6 lg:mt-0 lg:block">
-          <form className="search" action="#">
+          <form className="search" onSubmit={onSubmitSearch}>
             <div
               className="flex h-[40px] overflow-hidden rounded-[50px] bg-primary-600/40">
               <input
                 className="search w-full border-none bg-transparent py-[5px] pl-5 text-white placeholder-slate-300 focus:border-none focus:ring-0 focus:ring-transparent"
                 type="search"
-                placeholder="Search..." />
+                placeholder="Search..." 
+                onChange={onSearchChange}
+                />
               <button className="btn-search px-3 text-white" type="submit">
                 <i className="bi bi-search flex text-xl"></i>
               </button>

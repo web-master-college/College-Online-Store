@@ -5,6 +5,7 @@ import Products from './pages/Products/Products';
 import ProductDetails from './pages/ProductDetails/ProductDetails';
 import ContactUs from './pages/ContactUs/ContactUs';
 import ThankYou from './pages/ThankYou/ThankYou';
+import Search from "./pages/Search/Search";
 
 const NotFoundPage = () => (
   <div className="container mx-auto my-5 px-2 sm:px-8">
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
   {
     path: "*",
     element: <NotFoundPage />,
+  },
+  {
+    path: "/search",
+    element: <Search />,
   },
 ]);
 
