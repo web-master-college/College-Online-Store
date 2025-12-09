@@ -16,13 +16,17 @@ export const notifyMessage = (message) => {
   };
 
 // API Functions
+// query = undefined , isSearch = false
 export const fetchProducts = async (query, isSearch = false) => {
   try {
     const url = `${API_BASE_URL}/api/products${isSearch ? `?q=${query}`: ''}`;
     const response = await fetch(url);
     if (!response.ok) throw new Error('Failed to fetch products');
     const data = await response.json();
-    return data.products || [];
+    if(data.success === true){
+      return data.products;
+    }
+    return [];
   } catch (error) {
     console.error('Error fetching products:', error);
     throw error;

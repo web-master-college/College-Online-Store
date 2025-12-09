@@ -4,7 +4,10 @@ import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import { fetchProducts } from '../../utils';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import get from 'lodash/get';
 
+
+// [] ---> [{},{},{},{},{},{},{}]
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -181,7 +184,7 @@ export default function Home() {
                       <Link to={`/product/${product.id}`}>
                         <img
                           className="h-full w-full object-contain"
-                          src={product.url || '/img/product/prod-1.jpg'}
+                          src={get(product, 'images[0].url', 'https://placehold.co/249x190?text=Product')}
                           alt={product.name} />
                       </Link>
                     </div>
