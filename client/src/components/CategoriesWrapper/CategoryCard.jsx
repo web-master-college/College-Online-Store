@@ -6,9 +6,9 @@ export default function CategoryCard(props) {
         <div className="col-span-3 flex border" key={props.id}> 
             <Link
                 className="flex w-full justify-center bg-white p-5 transition-all duration-300 hover:relative hover:z-[2] hover:shadow-xl"
-                to={`/category/${props.id}`}
+                to={`/category?categoryId=${props.id}`}
                 state={{categoryName: props.name}}
-                >
+                >   
                 <div>
                     <i
                         className="bi bi-gpu-card mb-2 flex justify-center text-[40px] text-primary-500"></i>

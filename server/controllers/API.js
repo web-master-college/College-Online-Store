@@ -1,10 +1,24 @@
 const {Form, Product, ProductCategories, ProductImages} = require('../models');
- 
+const {Op} = require('sequelize');
+const _ = require('lodash');
+
+const getOrderBy = (order) =>{
+    switch(order){
+        case 'low':
+            return  [['price', 'ASC']];
+        case 'high':
+            return [['price', 'DESC']];
+        default:    
+            return [['price', 'ASC']];
+    }
+}
+
 
 const getProductCategories = async (req, res) =>{
     try {
-        const categoryId = parseInt(req.params.categoryId);
-  
+        const {orderBy} = req.query;
+        const order = getOrderBy(orderBy);
+        const categoryIds = _.split(req.params.categoryId, ',');
         const productData = await Product.findAll({
             include: [
             { model: ProductImages, required: false, attributes: ['url'], as: 'images' },
@@ -12,8 +26,13 @@ const getProductCategories = async (req, res) =>{
                 model: ProductCategories,
                 required: true,
                 attributes: [],
-                where: {categoryId}
-            }
+                where: {
+                    categoryId:{
+                        [Op.in]: categoryIds
+                    }
+                }
+            },
+            order
             ] // join
         })
         // console.log('productData', productData);

@@ -2,6 +2,10 @@ import iziToast from 'izitoast';
 
 const API_BASE_URL = 'http://localhost:5000';
 
+
+
+
+
 // Izi Toast
 export const notifyMessage = (message) => {
   iziToast.show({
@@ -17,7 +21,7 @@ export const notifyMessage = (message) => {
 
 export const fetchProductCategories = async (categoryId ,query) => {
   try {
-    const url = `${API_BASE_URL}/api/product-categories/${categoryId}/${query ? `q=${query}` : ''}`;
+    const url = `${API_BASE_URL}/api/product-categories/${categoryId}/${query ? `?${query}` : ''}`;
     const response = await fetch(url);
     if (!response.ok) throw new Error('Failed to fetch products');
     const data = await response.json();

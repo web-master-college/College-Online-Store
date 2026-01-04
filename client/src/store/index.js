@@ -3,9 +3,11 @@ import categorySlice from '../reducers/categorySlice';
 import counterReducer from '../reducers/counterSlice'
 
 
-export const store = configureStore({
+const store = configureStore({
   reducer: {
     counter: counterReducer,
     category: categorySlice
   },
 });
+
+export default store;

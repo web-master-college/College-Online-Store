@@ -4,21 +4,36 @@ import { useLocation, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import { fetchProductCategories } from '../../utils';
+import get from 'lodash/get';
+import uniq from 'lodash/uniq';
+import { setCategories } from '../../reducers/categorySlice';
+import { useDispatch } from 'react-redux';
+import { usePrevious } from '../../customHooks';
+
 
 export default function Search(props) {
-    const {categoryName} = useLocation().state;
-    const {categoryId} = useParams();
+    const location = useLocation();
+    const dispatch = useDispatch();
+    const [orderBy, setOrderBy] = useState('low');
+    const prevOrderBy = usePrevious('low');
+
+
+    const categoryName = get(location, 'state.categoryName', '');
+    const searchParams = new URLSearchParams(location.search);
+    const categoryId = searchParams.get('categoryId');
     const [products, setProducts] = useState(props.products); 
 
 
     useEffect(() =>{
-        if(isEmpty(props.products)) {
-            fetchProductCategories(categoryId)
+        if(isEmpty(props.products) || (orderBy !== prevOrderBy)) {
+            fetchProductCategories(categoryId, `orderBy=${orderBy}`)
             .then(products => {
                 setProducts(products);
+                dispatch(setCategories(categoryId));
+                
             })
         }
-    },[categoryId])
+    },[categoryId, dispatch, orderBy, prevOrderBy])
 
 
     return (
@@ -33,11 +48,11 @@ export default function Search(props) {
                                 '
                             </span>
                             <form>
-                                <select
+                                <select onChange={e => setOrderBy(e.target.value)}
                                     className="nice-select order-by rounded-lg border-2 border-gray-200 bg-white outline-none transition-all duration-300 focus:border-2 focus:border-primary-500 focus:ring-0">
-                                    <option value="0">Lower price</option>
-                                    <option value="1">Higher price</option>
-                                    <option value="1">Most popular</option>
+                                    <option value="low">Lower price</option>
+                                    <option value="high">Higher price</option>
+                                    <option value="popular">Most popular</option>
                                 </select>
                             </form>
                         </div>

@@ -16,7 +16,7 @@ const NotFoundPage = () => <h1>404 - Page Not Found</h1>;
 
 const router = createBrowserRouter([
   {
-    path: "/category/:categoryId",
+    path: "/category",
     element: (
       <Search isCategory second="Category"/>
     ),
