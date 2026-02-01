@@ -1,5 +1,7 @@
 
 const { DataTypes } = require('sequelize');
+const PRIVATE_KEY = 'CAT_MOSHE_DAHAN_COHEN';
+
 
 function getModelInfo(Model) {
   // Create a mock sequelize object to get the model definition
@@ -40,7 +42,7 @@ const getModelAttributes = (ModelInstance, Sequelize, DataTypes) => {
 
 
 module.exports = {
-    sequelize,
+    PRIVATE_KEY,
     getModelInfo,
     getModelAttributes
 }

@@ -1,9 +1,14 @@
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const {User} = require('../models');
+const {Op} = require('sequelize');
+var jwt = require('jsonwebtoken');
+const { PRIVATE_KEY } = require('../utils/database');
+
 
 const logOut = async (request, response) =>{
         await request.session.destroy();
+        response.clearCookie('      ');
         response.redirect('/');
 }
 
@@ -39,9 +44,29 @@ const SignUp = async (request, response) =>{
         
 }
 
-const SignIn = (request, response) =>{
- 
-}
+const SignIn = async (request, response) =>{
+            const {password, userOrEmail} = request.body;
+
+            const user = await User.findOne({
+                attributes: ['password', 'username'],
+                where:{
+                    [Op.or]:{
+                        username: userOrEmail,
+                        email: userOrEmail
+                    }
+                },
+                raw: true
+            })
+
+            if(!user){
+                response.json('User was not found!');
+                return;
+            }
+            const token = jwt.sign(user, PRIVATE_KEY, {expiresIn: '24h' });
+            response.cookie('token', token);
+            response.redirect('/');
+            // response.json('User found: ' + JSON.stringify(user));
+} 
 
 
 

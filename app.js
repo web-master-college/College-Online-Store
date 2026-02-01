@@ -12,6 +12,8 @@ const ApiRoutes = require('./routes/Api');
 const {sequelize} = require('./models');
 
 const session = require('express-session');
+const jwt = require('jsonwebtoken');
+const { PRIVATE_KEY } = require('./utils/database');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 // products
 
@@ -33,7 +35,10 @@ app.use(bodyParser.urlencoded());
 // const ProductConroller = require('./controllers/Product');
 
 app.use((req, res, next) => {
-  res.locals.user = req.session.user;
+  const token = req.cookies.token;
+  const user = token ? jwt.verify(req.cookies.token, PRIVATE_KEY) : null;
+  res.locals.user = user;
+  // res.locals.user = req.session.user;
   next();
 });
 
