@@ -57,7 +57,7 @@ const SignIn = async (request, response) =>{
                 },
                 raw: true
             })
-
+            
             if(!user){
                 response.json('User was not found!');
                 return;
