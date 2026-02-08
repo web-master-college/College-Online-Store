@@ -1,17 +1,27 @@
-module.exports = (sequelize, DataTypes) => {
+const {sequelize} = require('../utils/database');
+
+module.exports = (sequelizez, DataTypes) => {
     const ProductImages = sequelize.define('ProductImages', {
-        productId: {
+        prodcutId: {
             allowNull: false,
             type: DataTypes.INTEGER,
-            field: 'product_id'
+            field: 'product_id',
+            primaryKey: true
         },
         url: {
+            allowNull: false,
             type: DataTypes.STRING,
-            allowNull: false
+            primaryKey: true
         }
-    },{
-        tableName: 'productimages',
+    }, {
+        indexes: [{
+            unique: true,
+            fields: ['product_id', 'url']
+        }],
+        tableName: 'product_images',
+
         timestamps: false
+        
     })
 
     return ProductImages;

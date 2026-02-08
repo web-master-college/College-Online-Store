@@ -1,51 +1,5 @@
 "use strict";
 
-function setCookie(cname, cvalue, exdays) {
-  const d = new Date();
-  d.setTime(d.getTime() + (exdays*24*60*60*1000));
-  let expires = "expires="+ d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
-
-function getCookie(name) {
-  const nameEQ = name + "=";
-  const ca = document.cookie.split(';');
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) === ' ') { // Remove leading spaces
-      c = c.substring(1, c.length);
-    }
-    if (c.indexOf(nameEQ) === 0) { // Check if this cookie starts with the desired name
-      return c.substring(nameEQ.length, c.length); // Return the cookie's value
-    }
-  }
-  return null; // Return null if the cookie is not found
-}
-
-
-const contactFormMain = document.querySelector('#contact-form');
-function onSubmitForm(event) {
-  event.preventDefault();
-  const formData = new FormData(event.target);
-  const data = Object.fromEntries(formData.entries());
-  const query = new URLSearchParams(data).toString();
-
-  fetch('/api/contact?' + query)
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      notifyMessage('Form submitted successfully!');
-      event.target.reset();
-    }else{
-      notifyMessage('Error submitting form...'); 
-    }
-  });
-
-}
-if(contactFormMain) {
-  contactFormMain.addEventListener('submit', onSubmitForm);
-}
-
 // Load event to execute code after the page has fully loaded
 window.addEventListener("load", () => {
   loadInitialSetup(); // Load initial setup
@@ -199,7 +153,7 @@ const resizeModal = (target) => {
 const loader = () => {
   setTimeout(() => {
     const loader_content = document.querySelector(".loader-content");
-    loader_content && loader_content.classList.add(
+    loader_content.classList.add(
       "transition-all",
       "duration-500",
       "opacity-0",
@@ -210,7 +164,7 @@ const loader = () => {
   setTimeout(() => {
     const loader = document.querySelector(".loader");
     const body = document.querySelector("body");
-    loader && loader.classList.add(
+    loader.classList.add(
       "transition-all",
       "duration-1000",
       "opacity-0",
@@ -390,10 +344,10 @@ const toggleCheck = (target) => {
 // Make "Go top" button appear/disappear when scrolling down
 const scrollUpButton = () => {
   const button = document.querySelector(".scroll-up");
-  if (document.documentElement.scrollTop > 500 && button) {
+  if (document.documentElement.scrollTop > 500) {
     button.classList.remove("-bottom-16");
     button.classList.add("z-40", "bottom-8");
-  } else if(button){
+  } else {
     button.classList.remove("z-40", "bottom-8");
     button.classList.add("-bottom-16");
   }
@@ -836,10 +790,10 @@ const select = () => {
 };
 
 // Izi Toast
-const notifyMessage = (message) => {
+const notifyMessage = () => {
   iziToast.show({
-    message,
-    position: "bottomRight",
+    message: "Message sent successfully!",
+    position: "topRight",
     color: "rgb(34 197 94 / 70%",
     icon: "bi-check-circle-fill",
     iconColor: "#fff",
@@ -891,70 +845,152 @@ const sendEmail = () => {
       );
     });
 };
+// -------------------------------- My functions ----------------------------------
+
+function getCookie(name) {
+  const nameEQ = name + "=";
+  const ca = document.cookie.split(';');
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) === ' ') { // Remove leading spaces
+      c = c.substring(1, c.length);
+    }
+    if (c.indexOf(nameEQ) === 0) { // Check if this cookie starts with the desired name
+      return c.substring(nameEQ.length, c.length); // Return the cookie's value
+    }
+  }
+  return null; // Return null if the cookie is not found
+}
+
+function setCookie(cname, cvalue, exdays) {
+  const d = new Date();
+  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+  let expires = "expires=" + d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+const contactFormMain = document.querySelector('#contact-form');
+function onSubmitForm(event) {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  const data = Object.fromEntries(formData.entries());
+  const query = new URLSearchParams(data).toString();
+
+  fetch('/api/contact?' + query)
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        notifyMessage('Form submitted successfully!');
+        event.target.reset();
+      } else {
+        notifyMessage('Error submitting form...');
+      }
+    });
+
+}
+if (contactFormMain) {
+  contactFormMain.addEventListener('submit', onSubmitForm);
+}
 
 const signUpForm = document.getElementById('sign-up-form');
 
-function onSubmitSignUpForm(event){
-        event.preventDefault();
-        const name = signUpForm.querySelector('input[name=name]');
-        const email = signUpForm.querySelector('input[name=email]');
-        const password = signUpForm.querySelector('input[name=password]');
-        const confirmPassword = signUpForm.querySelector('input[name=confirmPassword]');
-        let isError = false;
-       
-        if(name && name.value.trim() === ''){
-          notifyMessage('name can not be empty')
-          isError = true;
-        }
+function onSubmitSignUpForm(event) {
+  event.preventDefault();
+  const name = document.querySelector('input[name=username]');
+  const email = document.querySelector('input[name=email]');
+  const password = document.querySelector('form[id=sign-up-form] input[name=password]');
+  const confirmPassword = document.querySelector('input[name=password2]');
+  let isError = false;
 
-        if(email && email.value.trim() === ''){
-          notifyMessage('Email can not be empty')
-          isError = true;
+  if (name && name.value.trim() === '') {
+    notifyMessage('Name can not be empty');
+    console.log(1);
+    isError = true;
+  }
+  if (email && email.value.trim() === '') {
+    notifyMessage('Email can not be empty');
+    console.log(2);
 
-        }
-        if(password && password.value.trim() === ''){
-          notifyMessage('password can not be empty')
-          isError = true;
+    isError = true;
+  }
+  if (password && password.value.trim() === '') {
+    notifyMessage('Password can not be empty');
+    console.log(3);
 
-        }
+    isError = true;
+  }
+  if (confirmPassword && confirmPassword.value.trim() === '') {
+    notifyMessage('Confirm password can not be empty');
+    console.log(4);
 
-        if(confirmPassword && confirmPassword.value.trim() === ''){
-          notifyMessage('confirm password can not be empty')
-          isError = true;
+    isError = true;
+  }
 
-        }
-
-
-        if(confirmPassword.value !== password.value){
-          notifyMessage('passwords do not match');
-          isError = true;
-
-        }
-
-        if(isError){
-          return false;
-        }
-
-        this.submit();
+  if (isError) {
+    return false;
+  }
+  this.submit();
 }
 
-if(signUpForm){
+if (signUpForm) {
   signUpForm.addEventListener('submit', onSubmitSignUpForm);
 }
 
 
-function onLoadPage(){
-    const signup = getCookie('signup');
-    if(signup){
+function onLoadPage() {
+  const signup = getCookie('signup');
+  if (signup) {
 
-      const decodedCookieSignUp = decodeURIComponent(signup);
-      const signupObject = JSON.parse(decodedCookieSignUp);
-      // {status: true, message: '', action: 'signup'}
+    const decodedCookieSignUp = decodeURIComponent(signup);
+    const signupObject = JSON.parse(decodedCookieSignUp);
+    // {status: true, message: '', action: 'signup'}
 
-      if(signupObject && signupObject.status && signupObject.action === 'signup'){
-        notifyMessage(signupObject.message);
-      }
-      setCookie('signup', null , 0);
+    if (signupObject && signupObject.status && signupObject.action === 'signup') {
+      notifyMessage(signupObject.message);
     }
+    setCookie('signup', null, 0);
+  }
 }
 document.addEventListener('DOMContentLoaded', onLoadPage)
+
+const mainSearchInput = document.getElementById('main-search-input');
+
+async function onSearchInputChange(e) {
+  const value = e.target.value;
+  let resultsList = document.querySelector('.main-search-results');
+  if (resultsList) {
+    resultsList.remove();
+  }
+  if (value.length < 2) return;
+  const encodeUri = encodeURIComponent(value)
+  // console.log(encodeUri)
+  const results = await fetch(`/api/search?value=${encodeUri}`).then(res => res.json());
+  // console.log(results);
+  if (results.length === 0) return
+  const mainSearch = document.getElementById('main-search');
+  resultsList = document.createElement('ul');
+  resultsList.className = 'main-search-results';
+  mainSearch.appendChild(resultsList);
+  for (let result of results) {
+    const line = document.createElement('li');
+    line.className = 'search-result-line';
+    const url = document.createElement('a');
+    url.className = 'search-result-line-url';
+    url.textContent = result.name;
+    url.setAttribute('href', `/product/${result.id}`);
+    line.appendChild(url);
+    resultsList.appendChild(line);
+  }
+  const allResults = document.createElement('li');
+  allResults.className = 'search-result-line';
+  const url = document.createElement('a');
+  url.className = 'search-result-line-url';
+  url.textContent = 'All results...';
+  url.setAttribute('href', `/search/?q=${value}`);
+  allResults.appendChild(url);
+  resultsList.appendChild(allResults);
+}
+
+if (mainSearchInput) {
+  mainSearchInput.addEventListener('input', onSearchInputChange)
+}

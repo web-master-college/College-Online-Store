@@ -1,77 +1,87 @@
+const { response } = require('express');
+const { User } = require('../models');
 const bcrypt = require('bcrypt');
+const { Op } = require('sequelize');
+const jwt = require('jsonwebtoken');
 const saltRounds = 10;
-const {User} = require('../models');
-const {Op} = require('sequelize');
-var jwt = require('jsonwebtoken');
-const { PRIVATE_KEY } = require('../utils/database');
+require('dotenv').config();
+const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
 
-const logOut = async (request, response) =>{
-        await request.session.destroy();
-        response.clearCookie('      ');
-        response.redirect('/');
+const signUpForm = async (req, res) => {
+    const { username, email, password, password2 } = req.body;
+    const result = { status: true, message: '', action: 'signup' };
+
+    if (password !== password2) {
+        result.message = 'Error: Passowrds are mismatch';
+        result.status = false;
+    }
+
+    let user = null;
+    try {
+        const encryptedPassword = await bcrypt.hash(password, saltRounds)
+        const today = new Date();
+        user = await User.create({
+            username,
+            email,
+            password: encryptedPassword,
+            createdAt: today,
+            updatedAt: today
+        })
+        result.message = 'You have been registered successfully';
+        result.status = true;
+        const token = jwt.sign({ username: username, password: encryptedPassword }, PRIVATE_KEY, { expiresIn: '24h' })
+        res.cookie('token', token);
+    } catch (error) {
+        console.log(error.message)
+        result.message = error.message;
+        result.status = false;
+    }
+    // res.cookie('signup', JSON.stringify(result));
+    // req.session.user = user;
+    res.redirect('/');
 }
 
+const logInForm = async (req, res) => {
+    const { password, userOrEmail } = req.body;
 
-const SignUp = async (request, response) =>{
-        const {name, email, password, confirmPassword} = request.body;
-        const result = {status: true, message: '', action: 'signup'};
-        let user = null;
-        try{
-            if(password !== confirmPassword){
-                result.message = 'Error: Passwords are mismatch';
-                result.status = false;
-                throw new Error(result.message);
-            }
-            const encryptedPassword = await bcrypt.hash(password, saltRounds);
-            user = await User.create({
-                username: name,
-                email, 
-                password: encryptedPassword
-            })    
-            result.message = 'You have been registered successfully';
-            result.status = true;
+    const user = await User.findOne({
+        attributes: ['password', 'username'],
+        where: {
+            [Op.or]: {
+                username: userOrEmail,
+                email: userOrEmail
+            },
+        },
+        raw: true
+    })
 
-        }catch(error){
-            result.message = error.message;
-            result.status = false; 
-        }
+    if (!user) {
+        res.json('User was not found')
+        return
+    }
+    console.log(user.password)
+    const isSamePassword = await bcrypt.compare(password, user.password);
+    console.log(isSamePassword)
+    if (!isSamePassword) {
+        console.log('test')
+        res.json('Incorrect pasword')
+        return
+    }
 
-
-        // response.cookie('signup', JSON.stringify(result));
-        request.session.user = user;
-        response.redirect('/');
-        
+    const token = jwt.sign(user, PRIVATE_KEY, { expiresIn: '24h' })
+    res.cookie('token', token);
+    res.redirect('/');
 }
 
-const SignIn = async (request, response) =>{
-            const {password, userOrEmail} = request.body;
-
-            const user = await User.findOne({
-                attributes: ['password', 'username'],
-                where:{
-                    [Op.or]:{
-                        username: userOrEmail,
-                        email: userOrEmail
-                    }
-                },
-                raw: true
-            })
-            
-            if(!user){
-                response.json('User was not found!');
-                return;
-            }
-            const token = jwt.sign(user, PRIVATE_KEY, {expiresIn: '24h' });
-            response.cookie('token', token);
-            response.redirect('/');
-            // response.json('User found: ' + JSON.stringify(user));
-} 
-
-
+const logOut = async (request, response) => {
+    // await request.session.destroy();
+    response.clearCookie('token')
+    response.redirect('/');
+}
 
 module.exports = {
-    SignUp,
-    SignIn,
+    signUpForm,
+    logInForm,
     logOut
 }

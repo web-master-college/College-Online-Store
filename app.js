@@ -1,79 +1,63 @@
-const express = require('express');
-const chalk = require('chalk');
-const app = express();
-const PORT = 3000;
+const chalk = require("chalk");
+const express = require("express");
 const path = require('path');
-const HomePageRoutes = require('./routes/Home');
+const homeContorller = require('./controllers/Home');
+const contactController = require('./controllers/Contact')
 const ProductRoutes = require('./routes/Product');
-const AuthRoutes = require('./routes/Auth');
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
+const HomePageRoutes = require('./routes/Home');
 const ApiRoutes = require('./routes/Api');
-const {sequelize} = require('./models');
-
+const AuthRoutes = require('./routes/Auth');
+const PORT = 3000;
+const { sequelize } = require('./utils/database');
+const { error } = require("console");
+const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 const session = require('express-session');
-const jwt = require('jsonwebtoken');
-const { PRIVATE_KEY } = require('./utils/database');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
-// products
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
-var sessionStore = new SequelizeStore({
-  db: sequelize,
-  checkExpirationInterval: 15 * 60 * 1000,
-  expiration: 7 * 24 * 60 * 60 * 1000
-});
+// var sessionStore = new SequelizeStore({
+//     db: sequelize,
+//     checkExpirationInterval: 15 * 60 * 1000,
+//     expiration: 7 * 24 * 60 * 60 * 1000
+// });
 
-app.use(session({
-  secret: 'keyboard cat',
-  resave: false, 
-  saveUninitialized: false,
-  store: sessionStore
-}));
 
-app.use(cookieParser());
-app.use(bodyParser.urlencoded());
-// const ProductConroller = require('./controllers/Product');
-
-app.use((req, res, next) => {
-  const token = req.cookies.token;
-  const user = token ? jwt.verify(req.cookies.token, PRIVATE_KEY) : null;
-  res.locals.user = user;
-  // res.locals.user = req.session.user;
-  next();
-});
-
-// HTTP -> GET, POST, DELETE , PUT
-
+const app = express();
+app.use(bodyParser.urlencoded())
+app.use(cookieParser())
 app.set('view engine', 'ejs');
-// app.use(express.json())
-
-
-
-app.use(express.static(path.join(__dirname,'public')));
-app.use('/product', ProductRoutes);
-app.use('/auth', AuthRoutes);
-app.use(HomePageRoutes);
-app.use('/api', ApiRoutes);
-
-
-
-// Homepage
-// app.get('/', HomeController.homePage);
-
-// app.get('/products', ProductConroller.showProducts);
-
-
-
-
-app.listen(PORT, async function(){
-    console.log(chalk.magenta('Server is running!'));
-    try {
-        
-        await sequelize.authenticate();
-        await sessionStore.sync();
-        console.log(chalk.magenta('Connection has been established successfully.'));
-      } catch (error) {
-        console.error(chalk.bgCyan('Unable to connect to the database:'), error);
-      }
-
+app.use(express.static(path.join(__dirname, 'public')))
+// app.use(session({
+//     secret: 'keyboard cat',
+//     resave: false,
+//     saveUninitialized: false,
+//     store: sessionStore
+// }));
+app.use((req, res, next) => {
+    const token = req.cookies.token;
+    const user = token ? jwt.verify(token, PRIVATE_KEY) : null
+    res.locals.user = user;
+    // res.locals.user = req.session.user;
+    next();
 });
+
+// routes directs
+app.use(HomePageRoutes);
+app.use('/product', ProductRoutes);
+app.use('/api', ApiRoutes);
+app.use('/auth', AuthRoutes);
+
+app.listen(PORT, async function () {
+    console.log(chalk.blue('Server is running!'));
+    try {
+        await sequelize.authenticate();
+        // await sessionStore.sync();
+        console.log(chalk.green('connection has been established successfully'));
+    }
+    catch {
+        console.error(chalk.red('Unable to connect to the database:', error));
+    }
+})

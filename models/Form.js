@@ -1,5 +1,6 @@
+const { sequelize } = require('../utils/database');
 
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelizev, DataTypes) => {
     const Form = sequelize.define('Form', {
         id: {
             autoIncrement: true,
@@ -17,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             type: DataTypes.TEXT
         },
-        isCallBack:{
+        isCallBack: {
             type: DataTypes.BOOLEAN,
             defaultValue: false,
             field: 'is_call_back'
